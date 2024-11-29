@@ -6,7 +6,7 @@ erro_exit() {
     exit 1
 }
 
-# Detecta a versão do sistema operacional a partir de /etc/os-release
+# Detecta a versão do sistema operacional.
 
 versao_debian=debian12
 #if [[ -z "$versao_debian" ]]; then
