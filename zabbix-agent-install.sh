@@ -47,4 +47,27 @@ sudo systemctl enable zabbix-agent || erro_exit "Falha ao habilitar o serviço d
 echo "Instalação do Zabbix Agent concluída com sucesso!"
 
 
+read -p "Informe o IP do servidor Zabbix: " servidor_zabbix 
+if [[ -z "$servidor_zabbix" ]]; then
+	erro_exit "O IP do servidor Zabbix não foi informado."
+fi
 
+read -p "Informe o nome do host (hostname) : " hostname
+
+if [[ -z "$hostname" ]]; then
+	erro_exit "O nome do host não foi informado."
+fi	
+
+sudo sed -i "s/^Server=127.0.0.1/Server=${servidor_zabbix}/" /etc/zabbix/zabbix_agentd.conf
+
+sudo sed -i "s/^ServerActive=127.0.0.1/ServerActive=${servidor_zabbix}/" /etc/zabbix/zabbix_agentd.conf
+
+sudo sed -i "s/^Hostname=Zabbix server/Hostname=${hostname}/" /etc/zabbix/zabbix_agentd.conf
+
+echo "Reiniciando o serviço do Zabbix Agent..."
+sudo systemctl restart zabbix-agent || erro_exit "Falha ao reiniciar o serviço do Zabbix Agent."
+
+echo "Habilitando o serviço do Zabbix Agent..."
+sudo systemctl enable zabbix-agent || erro_exit "Falha ao habilitar o serviço do Zabbix Agent..."
+
+echo "Instalação e configuração do Zabbix Agent concluídas com sucesso!"
