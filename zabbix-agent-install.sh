@@ -6,38 +6,51 @@ erro_exit() {
     exit 1
 }
 
-# Detecta a versão do sistema operacional.
-
-#versao_debian=debian12
-#
 
 # Extrai o nome e a versão da distribuição
 os_name=$(lsb_release -i | awk -F'\t' '{print $2}' | tr '[:upper:]' '[:lower:]')
 os_version=$(lsb_release -r | awk -F'\t' '{print $2}')
 
+echo -e "\n"
 # Monta a string 
 os_model="${os_name}${os_version}"
 
+echo "Nome do sistema operacional: " $os_name
+echo "Versão do sistema operacional: " $os_version
+echo -e "\n"
+
 # Exibe o resultado echo ": $os_model"
 
-#if [[ -z "${os_model}" ]]; then
-#    erro_exit "Não foi possível detectar a versão do sistema operacional."
-#fi
+if [[ -z "${os_model}" ]]; then
+    echo -e "\n"  
+    erro_exit "Não foi possível detectar a versão do sistema operacional."
+fi
 
 # Exibe a versão do sistema operacional detectada
 echo "Versão do sistema operacional detectada: $os_model"
 
+######################################################################################################
+# Para formar o link na versão Ubuntu Arm64 é necessário trocar "os_name" por ubuntu-arm64 no código #  
+######################################################################################################
+
 # Monta o link do pacote de repositório do Zabbix baseado na versão do sistema
-url_repositorio="https://repo.zabbix.com/zabbix/6.0/debian/pool/main/z/zabbix-release/zabbix-release_latest+${os_model}_all.deb"
+url_repositorio="https://repo.zabbix.com/zabbix/6.0/${os_name}/pool/main/z/zabbix-release/zabbix-release_latest+${os_model}_all.deb"
+
 echo $url_repositorio
 
 # Baixa o pacote do repositório Zabbix
 echo "Baixando pacote do repositório Zabbix..."
+
 wget "$url_repositorio" -O zabbix-release.deb || erro_exit "Falha ao baixar o pacote do repositório Zabbix."
+
+echo -e "\n"
 
 # Instala o pacote do repositório Zabbix
 echo "Instalando pacote do repositório Zabbix..."
+
 sudo dpkg -i zabbix-release.deb || erro_exit "Falha ao instalar o pacote do repositório Zabbix."
+
+echo -e "\n"
 
 # Atualiza os repositórios e pacotes
 echo "Atualizando pacotes do sistema..."
@@ -47,13 +60,19 @@ sudo apt update || erro_exit "Falha ao atualizar os pacotes do sistema."
 echo "Instalando o Zabbix Agent..."
 sudo apt install -y zabbix-agent || erro_exit "Falha ao instalar o Zabbix Agent."
 
+echo -e "\n"
+
 # Reinicia o serviço do Zabbix Agent
 echo "Reiniciando o serviço do Zabbix Agent..."
 sudo systemctl restart zabbix-agent || erro_exit "Falha ao reiniciar o serviço do Zabbix Agent."
 
+echo -e "\n"
+
 # Habilita o Zabbix Agent para iniciar automaticamente
 echo "Habilitando o serviço do Zabbix Agent para iniciar no boot..."
 sudo systemctl enable zabbix-agent || erro_exit "Falha ao habilitar o serviço do Zabbix Agent."
+
+echo -e "\n"
 
 echo "Instalação do Zabbix Agent concluída com sucesso!"
 
