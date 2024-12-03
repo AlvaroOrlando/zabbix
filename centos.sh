@@ -3,11 +3,7 @@
 # Ler o conteúdo do /etc/os-release 
 source /etc/os-release
 
-
-# Função para instalação do Zabbix Agent no CentOS/RHEL
-
-instalar_zabbix_agent_rhel() {
-    # Obter a versão do sistema operacional
+ # Obter a versão do sistema operacional
     so_version=$VERSION_ID
     complete_name = $NAME
     name = name=$(echo $NAME | awk '{print tolower($1)}')	
@@ -16,6 +12,10 @@ instalar_zabbix_agent_rhel() {
     # Exibir a versão do sistema operacional detectada
     echo "Versão do sistema operacional detectada: CentOS/RHEL $so_version"
 
+# Função para instalação do Zabbix Agent no CentOS/RHEL
+
+instalar_zabbix_agent_rhel() {
+   
 rpm -Uvh https://repo.zabbix.com/zabbix/${so_version}/rhel/7/x86_64/zabbix-release-latest-6.0.el${so_version}.noarch.rpm
 
     # Verificando a versão do sistema e instalando o Zabbix Agent de acordo
