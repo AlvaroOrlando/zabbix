@@ -16,7 +16,7 @@ source /etc/os-release
 
 instalar_zabbix_agent_rhel() {
    
-rpm -Uvh https://repo.zabbix.com/zabbix/${so_version}/rhel/7/x86_64/zabbix-release-latest-6.0.el${so_version}.noarch.rpm
+rpm -Uvh https://repo.zabbix.com/zabbix/${so_version}/rhel/${so_version}/x86_64/zabbix-release-latest-6.0.el${so_version}.noarch.rpm
 
     # Verificando a versão do sistema e instalando o Zabbix Agent de acordo
     if [ "$so_version" -eq 8 ] || [ "$so_version" -eq 9 ]; then
