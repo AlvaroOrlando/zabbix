@@ -5,8 +5,8 @@ source /etc/os-release
 
  # Obter a versão do sistema operacional
     so_version=$VERSION_ID
-    complete_name = $NAME
-    name = name=$(echo $NAME | awk '{print tolower($1)}')	
+    complete_name=$NAME
+    name=$(echo $NAME | awk '{print tolower($1)}')	
     id_like=$(echo $ID_LIKE | awk '{print $1}')
 
     # Exibir a versão do sistema operacional detectada
